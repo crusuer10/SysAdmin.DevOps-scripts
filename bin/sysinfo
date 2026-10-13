@@ -16,9 +16,6 @@ CPU=$(grep "model name" /proc/cpuinfo | head -n 1 | awk '{ print "CPU: "$4" "$5"
 #ram
 RAM=$(free -m | grep Mem | awk '{ print "total RAM ( in MB ): " $2 "\nUsed: "$3 "\nFree: "$4}')
 
-#USB devices
-# USB_DEVICES=$(echo "USB devices:";  lsusb -t )
-
 clear
 echo -e "    System info      "
 echo -e "---------------------"
