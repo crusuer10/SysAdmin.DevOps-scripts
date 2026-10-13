@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+# The following script checks if the ssh file
+# exist for the public key to be stored. If not,
+# makes one.
+# -------------------------------------------
+
+# License: MIT
+
+
+    [ -f ~/.ssh ] || {
+    # Public key storage
+	  mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          }
+                

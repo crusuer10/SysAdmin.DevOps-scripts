@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+# colours
+
+RED='blank'
+GREEN='blank'
+YELLOW='blank'
+NC='blank'
+
+#space
+SPACE=$(df -h | grep /dev/nvme0n1p2 | head -n 1 | awk '{ print "Total space: " $2 "\nAvailable: "$4 }')
+
+#cpu
+CPU=$(grep "model name" /proc/cpuinfo | head -n 1 | awk '{ print "CPU: "$4" "$5" "$6" "$8 }')
+
+#ram
+RAM=$(free -m | grep Mem | awk '{ print "total RAM ( in MB ): " $2 "\nUsed: "$3 "\nFree: "$4}')
+
+#USB devices
+# USB_DEVICES=$(echo "USB devices:";  lsusb -t )
+
+clear
+echo -e "    System info      "
+echo -e "---------------------"
+echo -e "$CPU                 "
+echo
+echo -e "$RAM                 "
+echo
+echo -e "$SPACE               "
+echo -e "---------------------"

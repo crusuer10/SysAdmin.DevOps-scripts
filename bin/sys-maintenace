@@ -1,0 +1,78 @@
+#!/usr/bin/env bash
+
+
+
+# Script thats maintening system updates, clears cache
+# and removes orphaned packages. Supports Debian/Arch/Fedora based systems.
+
+
+# License: MIT
+
+
+OS="/etc/os-release"
+AUR_CACHE="~/.cache/yay"
+APT_CACHE="/var/cache/apt/archives/"
+DNF_CACHE="/var/cache/dnf"
+
+GREEN='blank'
+NC='blank'
+
+print() {
+  printf "${GREEN} [*] %s" "$1"
+}
+
+
+
+# Arch based
+grep -Eq 'Arch|Manjaro' "$OS" && { 
+     
+       	print "updating/upgrading.."; yes | sudo pacman -Syu 1>/dev/null
+        print "removing cache.."; sudo pacman -Sc 1>/dev/null
+	
+	if [ -d "$AUR_CACHE" ]; then
+		print "removing AUR cache.."; rm -rf "${AUR_CACHE}"/*
+	fi
+
+	# Checking for orphaned packages ( Arch )
+	    orphans_arch=$(pacman -Qtdq)
+	    [ -z "$orphans_arch" ] || print "cleaning orphaned packages.."; yes | sudo pacman -Rns "$orphan" 1>/dev/null
+ 
+	    exit 0
+}
+
+# Debian based
+grep -Eq 'Debian|Mint|Ubuntu|Lubuntu' "$OS" && {
+
+    
+	print "updating/upgrading.."; yes | sudo apt update && sudo apt upgrade 1>/dev/null
+	print " packages.."; sudo apt autoremove
+        
+	if du -sh "${APT_CACHE}"; then
+	        print "removing APT cache.."; sudo apt clean
+        fi
+
+        # Checking for orphaned packages ( Debian )	
+         	orphans_debian=$( sudo apt autoremove --dry-run )
+	        [ -z "$orphans_debian" ] || print "removing orphaned packages.."; yes | sudo apt autoremove 1>/dev/null	
+
+        exit 0
+}
+
+# Fedora based
+grep -Eq 'Fedora' "$OS" && {
+
+
+      print "updating/upgrading.."; yes | sudo dnf update && sudo dnf upgrade 1>/dev/null
+     
+
+      if du -sh "${DNF_CACHE}"; then
+	      print "removing DNF cache.."; sudo dnf clean all 1>/dev/null
+      fi
+
+      # Checking for orphaned packages ( fedora )       
+             orphans_fedora=$(sudo dnf autoremove --assumeno)    
+             [ -z "$orphans_fedora" ] || print "removing orphaned packages.."; yes | sudo dnf autoremove 1>/dev/null       
+     
+	      exit 0
+
+}
