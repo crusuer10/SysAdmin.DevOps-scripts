@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+# Simple bash script that inspects
+# log file's metadata.
+
+
+  [[ -z "$@" ]] && {
+
+    while IFS= read -r -d '' f; do
+         printf '%s\n' "$f"
+    done < <(sudo find / -type f -name "*.log" -print0 2>/dev/null)
+         exit 0
+    }
+
+
+ for f in "$@"; do
+
+   [[ ! -f "$f" ]] && {
+
+      printf '%s not a real file \n' "$f" >&2
+     }
+  done
+
+
+    stat "$@" 2> /dev/null
