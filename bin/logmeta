@@ -4,7 +4,7 @@
 # log file's metadata.
 
 
-  [[ -z "$@" ]] && {
+  [ -z "$@" ] && {
 
     while IFS= read -r -d '' f; do
          printf '%s\n' "$f"
@@ -14,11 +14,7 @@
 
 
  for f in "$@"; do
-
-   [[ ! -f "$f" ]] && {
-
-      printf '%s not a real file \n' "$f" >&2
-     }
+   [! -f "$f" ] && printf '%s not a real file \n' "$f" >&2
   done
 
 
