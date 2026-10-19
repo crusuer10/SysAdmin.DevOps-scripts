@@ -6,11 +6,11 @@
              _user="${1:-$USER}"
              f="${_user}.log-cap"
 
-        [ ! -d capture ] && mkdir -p ~/capture/
-        [ ! -f "$f" ] && cd ~/capture/ && >"$f"
+        [ ! -d ~/capture/ ] && mkdir -p ~/capture/
+        [ ! -f "$f" ] && cd ~/capture/ && : >"$f"
 
 
          while IFS= read -r line; do
                [[ "$line" =~ "$_user" ]] &&
-               printf '%s\n'  "$line" > ~/capture/"$f"
+               printf '%s\n'  "$line" >> ~/capture/"$f"
          done < /var/log/auth.log
